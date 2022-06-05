@@ -23,6 +23,8 @@ export function Post({ author, content, publishedAt }: PostProps) {
   const [comments, setComments] = useState(["Ola"]);
   const [newCommentText, setNewCommentText] = useState("");
 
+  const isNewCommentEmpty = newCommentText.trim().length === 0;
+
   const publishedDateFormatted = format(
     publishedAt,
     "d 'de' LLLL 'às' HH:mm'h'",
@@ -42,9 +44,22 @@ export function Post({ author, content, publishedAt }: PostProps) {
     setNewCommentText("");
   }
 
-  const handleChangeCommentText = (event: ChangeEvent<HTMLTextAreaElement>) => {
+  function handleChangeCommentText(event: ChangeEvent<HTMLTextAreaElement>) {
+    event.target.setCustomValidity("");
     setNewCommentText(event.target.value);
-  };
+  }
+
+  function deleteComment(commentToDelete: string) {
+    const commentsWithoutDeletedOne = comments.filter(
+      (comment) => comment !== commentToDelete
+    );
+
+    setComments(commentsWithoutDeletedOne);
+  }
+
+  function handleNewCommentInvalid(event: ChangeEvent<HTMLTextAreaElement>) {
+    event.target.setCustomValidity("Por favor, digite um comentário");
+  }
 
   return (
     <article className={styles.post}>
@@ -87,16 +102,24 @@ export function Post({ author, content, publishedAt }: PostProps) {
           onChange={handleChangeCommentText}
           name="comment"
           placeholder="Deixe um comentário"
+          onInvalid={handleNewCommentInvalid}
+          required
         />
 
         <footer>
-          <button type="submit">Publicar</button>
+          <button disabled={isNewCommentEmpty} type="submit">
+            Publicar
+          </button>
         </footer>
       </form>
 
       <div className={styles.commentList}>
         {comments.map((content) => (
-          <Comment key={content} content={content} />
+          <Comment
+            key={content}
+            content={content}
+            onDeleteComment={deleteComment}
+          />
         ))}
       </div>
     </article>
