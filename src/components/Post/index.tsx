@@ -1,4 +1,4 @@
-import { useState, FormEvent, ChangeEvent } from "react";
+import { useState, FormEvent, ChangeEvent, InvalidEvent } from "react";
 import { format, formatDistanceToNow } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
 
@@ -13,7 +13,7 @@ type PostProps = {
     role: string;
   };
   content: Array<{
-    type: string;
+    type: "paragraph" | "link";
     content: string;
   }>;
   publishedAt: Date;
@@ -57,7 +57,7 @@ export function Post({ author, content, publishedAt }: PostProps) {
     setComments(commentsWithoutDeletedOne);
   }
 
-  function handleNewCommentInvalid(event: ChangeEvent<HTMLTextAreaElement>) {
+  function handleNewCommentInvalid(event: InvalidEvent<HTMLTextAreaElement>) {
     event.target.setCustomValidity("Por favor, digite um comentário");
   }
 
