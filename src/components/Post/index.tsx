@@ -6,7 +6,7 @@ import { Avatar } from "../Avatar";
 import { Comment } from "../Comment";
 import styles from "./Post.module.css";
 
-type PostProps = {
+export type PostProps = {
   author: {
     avatarUrl: string;
     name: string;
@@ -20,7 +20,7 @@ type PostProps = {
 };
 
 export function Post({ author, content, publishedAt }: PostProps) {
-  const [comments, setComments] = useState(["Ola"]);
+  const [comments, setComments] = useState(["Fala dev"]);
   const [newCommentText, setNewCommentText] = useState("");
 
   const isNewCommentEmpty = newCommentText.trim().length === 0;
